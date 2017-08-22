@@ -2,9 +2,9 @@ import hashlib
 
 
 class Article(object):
-    def __init__(self, author=[], headline=None, text=None,
+    def __init__(self, authors=[], headline=None, text=None,
                  url=None, date=None):
-        self.author = author
+        self.authors = authors
         self.headline = headline
         self.text = text
         self.url = url
