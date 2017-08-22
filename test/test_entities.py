@@ -23,8 +23,8 @@ class TestArticle(unittest.TestCase):
     def test_new_article(self):
         article = Article(AUTHOR, HEADLINE, TEXT, URL, DATE)
         self.assertEqual(article.id, ID)
-        self.assertEqual(len(article.author), len(AUTHOR))
-        self.assertEqual(article.author, AUTHOR)
+        self.assertEqual(len(article.authors), len(AUTHOR))
+        self.assertEqual(article.authors, AUTHOR)
         self.assertEqual(article.headline, HEADLINE)
         self.assertEqual(article.text, TEXT)
         self.assertEqual(article.url, URL)

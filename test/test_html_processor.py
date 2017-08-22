@@ -101,3 +101,7 @@ class TestTheGuardianHtmlProcessor(unittest.TestCase):
 
     def test_get_text(self):
         self.assertEqual(self.p.get_text(), TEXT)
+
+
+if __name__ == '__main__':
+    unittest.main()
