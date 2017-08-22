@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 AUTHORS = ["Calla Wahlquist", "Gareth Hutchens"]
 HEADLINE = "Coalition says citizenship crisis will last months but MPs " \
            "will keep voting"
+DATE = "Sunday 20 August 2017 05.34 BST"
 
 
 class HtmlProcessor(object):
@@ -21,6 +22,10 @@ class HtmlProcessor(object):
     def get_headline(self):
         return self.soup.find("h1", {"class": "content__headline"})\
             .text.strip()
+
+    def get_date(self):
+        d = self.soup.find("time", {"itemprop": "datePublished"})
+        return d.text.strip().replace(u"\xa0", u" ")
 
 
 class TestArticleProcessor(unittest.TestCase):
@@ -39,3 +44,6 @@ class TestArticleProcessor(unittest.TestCase):
 
     def test_get_headline(self):
         self.assertEqual(self.p.get_headline(), HEADLINE)
+
+    def test_get_date(self):
+        self.assertEqual(self.p.get_date(), DATE)
