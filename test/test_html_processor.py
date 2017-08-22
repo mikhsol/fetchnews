@@ -1,6 +1,6 @@
 import unittest
 
-from bs4 import BeautifulSoup
+from src.html_processors import TheGuardianHtmlProcessor
 
 AUTHORS = ["Calla Wahlquist", "Gareth Hutchens"]
 HEADLINE = "Coalition says citizenship crisis will last months but MPs " \
@@ -79,37 +79,11 @@ TEXT = "The Turnbull government says if any more Coalition MPs are found to be d
        "supply.Australian Associated Press contributed to this report ".strip()
 
 
-class HtmlProcessor(object):
-    def __init__(self, html=None):
-        self.soup = BeautifulSoup(html, "html.parser")
-
-    def get_authors(self):
-        authors = []
-        for a in self.soup.find_all("a", {"rel": "author"}):
-            authors.append(a.span.text)
-
-        return authors
-
-    def get_headline(self):
-        return self.soup.find("h1", {"class": "content__headline"})\
-            .text.strip()
-
-    def get_date(self):
-        d = self.soup.find("time", {"itemprop": "datePublished"})
-        return d.text.strip().replace(u"\xa0", u" ")
-
-    def get_text(self):
-        t = self.soup.find("div", {"itemprop": "articleBody"})
-        [div.extract() for div in t.findAll("div")]
-        [aside.extract() for aside in t.findAll("aside")]
-        return t.get_text(strip=True)
-
-
-class TestHtmlProcessor(unittest.TestCase):
+class TestTheGuardianHtmlProcessor(unittest.TestCase):
     def setUp(self):
         with open("test/data/raw_html.txt", "r") as f:
             raw_html = f.read()
-        self.p = HtmlProcessor(raw_html)
+        self.p = TheGuardianHtmlProcessor(raw_html)
         self.authors = self.p.get_authors()
 
     def test_get_author_details(self):
