@@ -7,8 +7,8 @@ from argparse import ArgumentParser
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 
-DESCRIPTION = """News Fetcher - fetch news from news sites based on passed 
-parameters and store it in MongoDB database."""
+DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
+              "parameters and store it in MongoDB database."
 
 # default news source
 THE_GUARDIAN = "theguardian"
@@ -28,7 +28,8 @@ class Main(object):
 
     @staticmethod
     def newParser():
-        parser = ArgumentParser(prog="fetchnews", usage="python %(prog)s.py -s SOURCE",
+        parser = ArgumentParser(prog="fetchnews",
+                                usage="python %(prog)s.py -s SOURCE",
                                 description=DESCRIPTION)
         parser.add_argument("-s", "--source",
                             help="Source of news. Default value is"
@@ -40,15 +41,19 @@ class Main(object):
         return Main.Args(parsed.source, parsed.l)
 
 
+def final_performance_log(start):
+    logger.info("main function processing time: " +
+                str(time.process_time() - start))
+
+
 def main():
     start = time.process_time()
-    logger.info("start main function")
 
     status = 0
     arguments = Main().newParser()
     if arguments.showList:
         print(str(SOURCES).strip("[]"))
-        logger.info("main function processing time: " + str(time.process_time() - start))
+        final_performance_log(start)
         return status
 
     if not arguments.source:
@@ -56,7 +61,7 @@ def main():
 
     print(arguments.source)
 
-    logger.info("main function processing time: " + str(time.process_time() - start))
+    final_performance_log(start)
     return status
 
 
