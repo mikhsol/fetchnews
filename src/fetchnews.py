@@ -4,7 +4,7 @@ import sys
 import logging
 from argparse import ArgumentParser
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
