@@ -1,26 +1,12 @@
 import hashlib
 import unittest
 
-from src.entities import Author, Article
+from src.entities import Article
 
-FIRST_NAME = "Katharine"
-SECOND_NAME = "Murphy"
-POSITION = "Political Editor"
-TWITTER = "@murpharo"
-
-
-class TestAuthor(unittest.TestCase):
-    def test_new_author(self):
-        author = Author(FIRST_NAME, SECOND_NAME, POSITION, TWITTER)
-        self.assertEqual(author.first_name, FIRST_NAME)
-        self.assertEqual(author.second_name, SECOND_NAME)
-        self.assertEqual(author.position, POSITION)
-        self.assertEqual(author.twitter, TWITTER)
-
+AUTHOR = ["Katharine Murphy"]
 
 HEADLINE = "Labor questions if Joyce and Nash can make legally " \
            "valid decisions as ministers"
-AUTHOR = Author(FIRST_NAME, SECOND_NAME, POSITION, TWITTER)
 TEXT = "Labor has opened a new front in the Turnbull government’s" \
        " citizenship crisis, raising the prospect that ministers " \
        "may be unable to validly execute their ministerial duties" \
@@ -37,6 +23,7 @@ class TestArticle(unittest.TestCase):
     def test_new_article(self):
         article = Article(AUTHOR, HEADLINE, TEXT, URL, DATE)
         self.assertEqual(article.id, ID)
+        self.assertEqual(len(article.author), len(AUTHOR))
         self.assertEqual(article.author, AUTHOR)
         self.assertEqual(article.headline, HEADLINE)
         self.assertEqual(article.text, TEXT)
