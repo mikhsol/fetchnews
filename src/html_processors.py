@@ -24,7 +24,9 @@ class AbstractHtmlProcessor(object):
 
 class TheGuardianHtmlProcessor(AbstractHtmlProcessor):
     def __init__(self, html=None):
-        self.soup = BeautifulSoup(html, "html.parser")
+        self.soup = None
+        if html:
+            self.soup = BeautifulSoup(html, "html.parser")
 
     def get_authors(self):
         authors = []
