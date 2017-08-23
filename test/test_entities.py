@@ -1,34 +1,29 @@
-import hashlib
 import unittest
 
 from src.entities import Article
-
-AUTHOR = ["Katharine Murphy"]
-
-HEADLINE = "Labor questions if Joyce and Nash can make legally " \
-           "valid decisions as ministers"
-TEXT = "Labor has opened a new front in the Turnbull government’s" \
-       " citizenship crisis, raising the prospect that ministers " \
-       "may be unable to validly execute their ministerial duties" \
-       " under the constitution while there is a question about " \
-       "whether they have been validly elected."
-URL = "https://www.theguardian.com/australia-news/2017/aug/18/" \
-      "labor-questions-if-joyce-and-nash-can-make-legally-valid" \
-      "-decisions-as-ministers"
-DATE = "Friday 18 August 2017 12.36 BST"
-ID = hashlib.sha3_256(bytes(URL+DATE, 'utf-16be')).hexdigest()
+from test.constants import TG_AUTHORS, TG_HEADLINE, TG_TEXT, TG_ARTICLE_URL, TG_DATE, TG_ID
 
 
 class TestArticle(unittest.TestCase):
+    def setUp(self):
+        self.article = Article(TG_AUTHORS, TG_HEADLINE, TG_TEXT, TG_ARTICLE_URL, TG_DATE)
+
     def test_new_article(self):
-        article = Article(AUTHOR, HEADLINE, TEXT, URL, DATE)
-        self.assertEqual(article.id, ID)
-        self.assertEqual(len(article.authors), len(AUTHOR))
-        self.assertEqual(article.authors, AUTHOR)
-        self.assertEqual(article.headline, HEADLINE)
-        self.assertEqual(article.text, TEXT)
-        self.assertEqual(article.url, URL)
-        self.assertEqual(article.date, DATE)
+        self.assertEqual(self.article.id, TG_ID)
+        self.assertEqual(len(self.article.authors), len(TG_AUTHORS))
+        self.assertEqual(self.article.authors, TG_AUTHORS)
+        self.assertEqual(self.article.headline, TG_HEADLINE)
+        self.assertEqual(self.article.text, TG_TEXT)
+        self.assertEqual(self.article.url, TG_ARTICLE_URL)
+        self.assertEqual(self.article.date, TG_DATE)
+
+    def test_equality_article_passed(self):
+        a = Article(TG_AUTHORS, TG_HEADLINE, TG_TEXT, TG_ARTICLE_URL, TG_DATE)
+        self.assertTrue(self.article == a)
+
+    def test_equality_article_authors_violation(self):
+        a = Article(["A B"], TG_HEADLINE, TG_TEXT, TG_ARTICLE_URL, TG_DATE)
+        self.assertFalse(self.article == a)
 
 
 if __name__ == '__main__':
