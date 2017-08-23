@@ -4,22 +4,19 @@ import sys
 import logging
 from argparse import ArgumentParser
 
+from src.sources import sources
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
               "parameters and store it in MongoDB database."
 
-# default news source
-THE_GUARDIAN = "theguardian"
-# ths BBC source
-BBC = "bbc"
-SOURCES = [THE_GUARDIAN, BBC]
 
 
 class Main(object):
     class Args(object):
-        source = THE_GUARDIAN
+        source = sources["theguardian"]
         showList = False
 
         def __init__(self, s=None, l=False):
@@ -33,7 +30,7 @@ class Main(object):
                                 description=DESCRIPTION)
         parser.add_argument("-s", "--source",
                             help="Source of news. Default value is"
-                                 " The Guardian <" + THE_GUARDIAN + ">")
+                                 " The Guardian <" + sources["theguardian"] + ">")
         parser.add_argument("-l", action="store_true",
                             help="List of the possible sources.")
 
@@ -52,12 +49,12 @@ def main():
     status = 0
     arguments = Main().newParser()
     if arguments.showList:
-        print(str(SOURCES).strip("[]"))
+        print(str(sources.keys()).strip("[]"))
         final_performance_log(start)
         return status
 
     if not arguments.source:
-        arguments.source = THE_GUARDIAN
+        arguments.source = sources["theguardian"]
 
     print(arguments.source)
 
