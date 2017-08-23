@@ -12,6 +12,7 @@ import logging
 import requests
 from bs4 import BeautifulSoup
 
+from src.adapters import article_dict_adapter
 from src.entities import Article
 from src.html_processors import TheGuardianHtmlProcessor
 
@@ -29,13 +30,15 @@ class AbstractFetcherRunner(object):
     def _create_article(self, html, url):
         raise NotImplementedError
 
+    def _save(self, article):
+        raise NotImplementedError
+
     def run(self):
         links = self._fetch_articles_links()
         for link in links:
             html = self._fetch_article_data(link)
             article = self._create_article(html, link)
-            # self.repository.save(article)
-            logger.info("Article: %s - was saved.", article.headline)
+            self._save(article_dict_adapter(article))
 
 
 class TheGuardianFetcherRunner(AbstractFetcherRunner):
@@ -43,6 +46,8 @@ class TheGuardianFetcherRunner(AbstractFetcherRunner):
         self.url = "https://www.theguardian.com/au"
         self.html_processor = TheGuardianHtmlProcessor()
         self.repository = repository
+        if repository:
+            self.repository.connect()
 
     def _fetch_articles_links(self):
         r = requests.get(self.url)
@@ -53,6 +58,9 @@ class TheGuardianFetcherRunner(AbstractFetcherRunner):
     def _fetch_article_data(self, url):
         r = requests.get(url)
         return r.text
+
+    def _save(self, article):
+        self.repository.save(article)
 
     def _create_article(self, html, url):
         self.html_processor.__init__(html)

@@ -4,9 +4,11 @@ necessary data.
 To process web pages from new sources, necessary to implement interfaces from
 AbstractHtmlProcessor class.
 """
+import logging
 
 from bs4 import BeautifulSoup
 
+logger = logging.getLogger(__name__)
 
 class AbstractHtmlProcessor(object):
     def get_authors(self):
@@ -20,6 +22,11 @@ class AbstractHtmlProcessor(object):
 
     def get_text(self):
         raise NotImplementedError
+
+
+class ArticleParserException(BaseException):
+    def __init__(self, msg):
+        self.msg = msg
 
 
 class TheGuardianHtmlProcessor(AbstractHtmlProcessor):
@@ -44,7 +51,10 @@ class TheGuardianHtmlProcessor(AbstractHtmlProcessor):
         return d.text.strip().replace(u"\xa0", u" ")
 
     def get_text(self):
-        t = self.soup.find("div", {"itemprop": "articleBody"})
-        [div.extract() for div in t.findAll("div")]
-        [aside.extract() for aside in t.findAll("aside")]
-        return t.get_text(strip=True)
+        try:
+            t = self.soup.find("div", {"itemprop": "articleBody"})
+            [div.extract() for div in t.findAll("div")]
+            [aside.extract() for aside in t.findAll("aside")]
+            return t.get_text(strip=True)
+        except AttributeError:
+            logger.error("Something goes wrong with parsing {}".format(self.get_headline()))

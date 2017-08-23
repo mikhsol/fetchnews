@@ -4,7 +4,8 @@ import sys
 import logging
 from argparse import ArgumentParser
 
-from src.sources import sources
+from src.fetcher_runner import TheGuardianFetcherRunner
+from src.repositories import ArticlesMongoDbRepository
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -12,11 +13,15 @@ logging.basicConfig(level=logging.INFO)
 DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
               "parameters and store it in MongoDB database."
 
+sources = {
+    "theguardian": TheGuardianFetcherRunner(ArticlesMongoDbRepository()),
+    "bbc": "BBC"
+}
 
 
 class Main(object):
     class Args(object):
-        source = sources["theguardian"]
+        source = "theguardian"
         showList = False
 
         def __init__(self, s=None, l=False):
@@ -30,7 +35,7 @@ class Main(object):
                                 description=DESCRIPTION)
         parser.add_argument("-s", "--source",
                             help="Source of news. Default value is"
-                                 " The Guardian <" + sources["theguardian"] + ">")
+                                 " The Guardian <theguardian>")
         parser.add_argument("-l", action="store_true",
                             help="List of the possible sources.")
 
@@ -54,9 +59,10 @@ def main():
         return status
 
     if not arguments.source:
-        arguments.source = sources["theguardian"]
+        arguments.source = "theguardian"
 
-    print(arguments.source)
+    fr = sources[arguments.source]
+    fr.run()
 
     final_performance_log(start)
     return status
