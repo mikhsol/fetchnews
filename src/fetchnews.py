@@ -5,7 +5,7 @@ import logging
 from argparse import ArgumentParser
 
 from src.fetcher_runner import TheGuardianFetcherRunner, BbcFetcherRunner
-from src.repositories import ArticlesMongoDbRepository
+from src.repositories import ArticleMongoDbRepository
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -14,8 +14,8 @@ DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
               "parameters and store it in MongoDB database."
 
 sources = {
-    "theguardian": TheGuardianFetcherRunner(ArticlesMongoDbRepository()),
-    "bbc": BbcFetcherRunner(ArticlesMongoDbRepository()),
+    "theguardian": TheGuardianFetcherRunner(ArticleMongoDbRepository()),
+    "bbc": BbcFetcherRunner(ArticleMongoDbRepository()),
 }
 
 
