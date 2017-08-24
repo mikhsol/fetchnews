@@ -33,15 +33,22 @@ class AbstractFetcherRunner(object):
     def _save(self, article):
         raise NotImplementedError
 
+    def _tear_down(self):
+        raise NotImplementedError
+
     def run(self):
         links = self._fetch_articles_links()
         for link in links:
             html = self._fetch_article_data(link)
             article = self._create_article(html, link)
             self._save(article_dict_adapter(article))
+        self._tear_down()
 
 
 class TheGuardianFetcherRunner(AbstractFetcherRunner):
+    def _tear_down(self):
+        self.repository.close()
+
     def __init__(self, repository=None):
         self.url = "https://www.theguardian.com/au"
         self.html_processor = TheGuardianHtmlProcessor()
@@ -72,6 +79,9 @@ class TheGuardianFetcherRunner(AbstractFetcherRunner):
 
 
 class BbcFetcherRunner(AbstractFetcherRunner):
+    def _tear_down(self):
+        self.repository.close()
+
     def __init__(self, repository=None):
         self.url = "https://www.bbc.com"
         self.html_processor = BbcHtmlProcessor()

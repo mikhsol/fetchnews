@@ -8,7 +8,7 @@ from src.fetcher_runner import TheGuardianFetcherRunner, BbcFetcherRunner
 from src.repositories import ArticleMongoDbRepository
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 DESCRIPTION = "News Fetcher - fetch news from news sites based on passed " \
               "parameters and store it in MongoDB database."
@@ -49,13 +49,12 @@ def final_performance_log(start):
 
 
 def main():
-    start = time.process_time()
-
+    # start = time.process_time()
     status = 0
     arguments = Main().newParser()
     if arguments.showList:
         print(str(sources.keys()).strip("[]"))
-        final_performance_log(start)
+        # final_performance_log(start)
         return status
 
     if not arguments.source:
@@ -64,7 +63,7 @@ def main():
     fr = sources[arguments.source]
     fr.run()
 
-    final_performance_log(start)
+    # final_performance_log(start)
     return status
 
 

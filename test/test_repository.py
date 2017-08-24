@@ -1,9 +1,7 @@
-import logging
 import unittest
 
 from src.repositories import ArticleMongoDbRepository
 
-logger = logging.basicConfig(level=logging.WARNING)
 
 SINGLE_ARTICLE = {
     "id": 1,
@@ -74,23 +72,25 @@ class TestArticleMongoDbRepositoryIntegration(unittest.TestCase):
     def test_save_bulk_articles(self):
         self.r.bulk_save(BULK)
         db_obj = self.r.get_all()
-        self.assertEqual(len(BULK), db_obj.count())
+        self.assertEqual(len(BULK), len(db_obj))
 
     def test_search_by_keyword_single_word(self):
         self.r.bulk_save(BULK)
         db_obj = self.r.search_by_keywords(["war"])
-        self.assertEqual(2, db_obj.count())
+        self.assertEqual(2, len(db_obj))
+        db_obj = self.r.search_by_keywords(["WAR"])
+        self.assertEqual(2, len(db_obj))
         db_obj = self.r.search_by_keywords(["bomb"])
-        self.assertEqual(0, db_obj.count())
+        self.assertEqual(0, len(db_obj))
 
     def test_search_by_keyword_multiple_word(self):
         self.r.bulk_save(BULK)
         db_obj = self.r.search_by_keywords(["computer", "peace"])
-        self.assertEqual(2, db_obj.count())
+        self.assertEqual(2, len(db_obj))
         db_obj = self.r.search_by_keywords(["war", "love", "computer"])
-        self.assertEqual(4, db_obj.count())
+        self.assertEqual(4, len(db_obj))
         db_obj = self.r.search_by_keywords(["bomb", "cafe"])
-        self.assertEqual(0, db_obj.count())
+        self.assertEqual(0, len(db_obj))
 
 
 if __name__ == "__main__":

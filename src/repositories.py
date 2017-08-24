@@ -50,7 +50,7 @@ class ArticleMongoDbRepository(AbstractRepository):
             self.col.create_index([("text", pymongo.TEXT)])
 
     def search_by_keywords(self, keywords):
-        return self.col.find({"$text": {"$search": " ".join(k for k in keywords)}})
+        return list(self.col.find({"$text": {"$search": " ".join(k for k in keywords)}}, {"_id": 0}))
 
     def drop_db(self, db):
         self.client.drop_database(db)
@@ -59,4 +59,7 @@ class ArticleMongoDbRepository(AbstractRepository):
         return self.col.find_one({"id": idx})
 
     def get_all(self):
-        return self.col.find()
+        return list(self.col.find({}, {"_id": 0}))
+
+    def close(self):
+        self.client.close()
