@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python -m unittest test.test_adapters test.test_entities test.test_fetcher_runner test.test_html_processor

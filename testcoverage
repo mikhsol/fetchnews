@@ -1,0 +1,5 @@
+#!/bin/bash
+
+coverage run --source=src --omit=src/server.py -m src.fetchnews
+coverage report
+./cleandir
