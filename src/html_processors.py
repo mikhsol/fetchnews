@@ -58,7 +58,7 @@ class TheGuardianHtmlProcessor(AbstractHtmlProcessor):
             [aside.extract() for aside in t.findAll("aside")]
             return t.get_text(strip=True)
         except AttributeError:
-            logger.error("Probably this article has no text content (comics like article).")
+            logger.warning("Probably this article has no text content (comics like article).")
 
 
 class BbcHtmlProcessor(AbstractHtmlProcessor):
@@ -73,7 +73,7 @@ class BbcHtmlProcessor(AbstractHtmlProcessor):
             [hr.extract() for hr in t.findAll("hr")]
             return t.get_text(strip=True)
         except AttributeError:
-            logger.error("Probably this article has no text content (comics like article).")
+            logger.warning("Probably this article has no text content (comics like article).")
 
     def get_headline(self):
         h = self.soup.find("h1", {"role": "heading"})

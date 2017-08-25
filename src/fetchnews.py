@@ -53,7 +53,7 @@ def main():
     status = 0
     arguments = Main().newParser()
     if arguments.showList:
-        print(str(sources.keys()).strip("[]"))
+        print("News sources:", ", ".join(list(sources.keys())))
         # final_performance_log(start)
         return status
 
